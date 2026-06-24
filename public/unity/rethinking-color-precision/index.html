@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rethinking Color Precision - Unity WebGL Demo</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: #171717;
+      }
+
+      #unity-shell {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background: #171717;
+      }
+
+      #unity-canvas {
+        width: 100%;
+        height: 100%;
+        cursor: none;
+        display: block;
+        background: #231f20;
+      }
+
+      #unity-status {
+        position: absolute;
+        inset: auto 1rem 1rem 1rem;
+        color: #f4f4f5;
+        font: 14px/1.4 system-ui, sans-serif;
+        text-align: center;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="unity-shell">
+      <canvas id="unity-canvas" width="960" height="600" tabindex="-1"></canvas>
+      <div id="unity-status">Loading Unity demo...</div>
+    </div>
+    <script src="Build/Builds.loader.js"></script>
+    <script>
+      const status = document.querySelector("#unity-status");
+
+      createUnityInstance(
+        document.querySelector("#unity-canvas"),
+        {
+          dataUrl: "Build/Builds.data",
+          frameworkUrl: "Build/Builds.framework.js",
+          codeUrl: "Build/Builds.wasm",
+          streamingAssetsUrl: "StreamingAssets",
+          companyName: "DefaultCompany",
+          productName: "rethinking-color-precision",
+          productVersion: "0.1",
+        },
+        (progress) => {
+          status.textContent = `Loading Unity demo... ${Math.round(progress * 100)}%`;
+        },
+      )
+        .then(() => {
+          status.remove();
+        })
+        .catch((message) => {
+          status.textContent = message;
+          console.error(message);
+        });
+    </script>
+  </body>
+</html>

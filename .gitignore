@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+src/assets/paper1095_MM_CRC1.mp4 
+astro-dev.log 
+astro-dev.err.log 

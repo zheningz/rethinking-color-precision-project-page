@@ -1,0 +1,61 @@
+---
+interface Props {
+  src: string;
+  title: string;
+}
+
+const { src, title } = Astro.props;
+---
+
+<div
+  class="not-prose relative my-8 aspect-[16/10] w-full overflow-hidden rounded-lg border border-zinc-200 bg-zinc-950 dark:border-zinc-700"
+  data-unity-demo
+>
+  <iframe
+    src={src}
+    title={title}
+    class="h-full w-full"
+    allow="fullscreen; autoplay; gamepad"
+    allowfullscreen
+    data-unity-frame></iframe>
+  <button
+    class="absolute top-3 right-3 z-10 rounded-full border border-white/25 bg-zinc-950/75 px-3.5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-zinc-800/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-300"
+    type="button"
+    data-unity-fullscreen
+  >
+    Full screen
+  </button>
+</div>
+
+<script>
+  const normalClass =
+    "not-prose relative my-8 aspect-[16/10] w-full overflow-hidden rounded-lg border border-zinc-200 bg-zinc-950 dark:border-zinc-700";
+  const fullscreenClass =
+    "not-prose fixed inset-0 z-50 m-0 h-screen w-screen overflow-hidden rounded-none border-0 bg-zinc-950";
+
+  document.querySelectorAll("[data-unity-demo]").forEach((demo) => {
+    const button = demo.querySelector("[data-unity-fullscreen]");
+
+    if (!(button instanceof HTMLButtonElement)) {
+      return;
+    }
+
+    function setFullscreen(enabled: boolean) {
+      demo.className = enabled ? fullscreenClass : normalClass;
+      button.textContent = enabled ? "Exit full screen (Esc)" : "Full screen";
+      document.documentElement.classList.toggle("overflow-hidden", enabled);
+      document.body.classList.toggle("overflow-hidden", enabled);
+      demo.toggleAttribute("data-unity-is-fullscreen", enabled);
+    }
+
+    button.addEventListener("click", () => {
+      setFullscreen(!demo.hasAttribute("data-unity-is-fullscreen"));
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && demo.hasAttribute("data-unity-is-fullscreen")) {
+        setFullscreen(false);
+      }
+    });
+  });
+</script>
